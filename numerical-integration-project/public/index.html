@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Numerical Integration — Computational Mathematics</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Chart.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
+  <!-- Local JS -->
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav>
+  <div class="nav-brand">
+    <span class="dot"></span>
+    NumIntegrate
+  </div>
+  <div class="nav-links">
+    <a href="#modules" onclick="scrollTo('modules')">Modules</a>
+    <a href="#chart"   onclick="scrollTo('chart')">Visualisation</a>
+    <a href="#methods" onclick="scrollTo('methods')">Methods</a>
+  </div>
+  <span id="backend-status" style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);">
+    ● Checking API…
+  </span>
+</nav>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      Mathematics Capstone Project 
+    </div>
+
+    <h1 class="hero-title">
+      Computational Approaches to<br>
+      <span class="accent-word">Numerical Integration</span><br>
+      in <span class="accent2-word">Real-World Systems</span>
+    </h1>
+
+    <p class="hero-desc">
+      An interactive platform applying the Trapezoidal and Simpson's rules to
+      model continuous phenomena in urban infrastructure planning and financial
+      growth forecasting — bridging pure mathematics with practical computation.
+    </p>
+
+    <div class="hero-meta">
+      <span class="meta-chip">Trapezoidal Rule</span>
+      <span class="meta-chip">Simpson's 1/3 Rule</span>
+      <span class="meta-chip">Flask REST API</span>
+      <span class="meta-chip">Chart.js Visualisation</span>
+      <span class="meta-chip">Real-World Data</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ STATS BAR ══════════════ -->
+<div class="stats-bar">
+  <div class="stat-item" style="animation-delay:.05s">
+    <div class="stat-number" id="stat-methods">0</div>
+    <div class="stat-label">Integration Methods</div>
+  </div>
+  <div class="stat-item" style="animation-delay:.15s">
+    <div class="stat-number" id="stat-accuracy">0</div>
+    <div class="stat-label">Accuracy (Simpson's)</div>
+  </div>
+  <div class="stat-item" style="animation-delay:.25s">
+    <div class="stat-number" id="stat-modules">0</div>
+    <div class="stat-label">Application Modules</div>
+  </div>
+  <div class="stat-item" style="animation-delay:.35s">
+    <div class="stat-number">O(h²)</div>
+    <div class="stat-label">Trapezoidal Error Order</div>
+  </div>
+  <div class="stat-item" style="animation-delay:.45s">
+    <div class="stat-number">O(h⁴)</div>
+    <div class="stat-label">Simpson's Error Order</div>
+  </div>
+</div>
+
+<!-- ══════════════ MAIN ══════════════ -->
+<main class="main-content">
+
+  <!-- ── Section: Modules ── -->
+  <div class="section-header" id="modules">
+    <span class="section-tag">Interactive Computation</span>
+    <h2 class="section-title">Application Modules</h2>
+  </div>
+
+  <div class="modules-grid">
+
+    <!-- ▸ Module 1: Urban Development -->
+    <div class="module-card urban">
+      <div class="card-stripe"></div>
+      <div class="card-body">
+        <div class="card-header-row">
+          <div class="module-icon">🏗️</div>
+          <div class="card-title-group">
+            <h2>Urban Development &amp; Infrastructure Planning</h2>
+            <p>Estimate cumulative infrastructure load, road density, or population distribution over time using numerical integration.</p>
+          </div>
+        </div>
+
+        <label class="input-label">Quick Sample Data</label>
+        <div class="sample-row" id="samples-urban"></div>
+
+        <label class="input-label" for="input-urban">Data Points (comma-separated)</label>
+        <div class="input-wrap">
+          <textarea
+            class="data-input"
+            id="input-urban"
+            placeholder="e.g. 12, 18, 25, 30, 28, 35, 40, 38, 42, 45"
+          ></textarea>
+        </div>
+
+        <div class="step-row">
+          <label class="input-label" style="margin:0;white-space:nowrap" for="step-urban">Step size h =</label>
+          <input class="step-input" type="number" id="step-urban" value="1" min="0.01" step="0.1" />
+          <span class="step-hint">Interval between measurements (years, km, etc.)</span>
+        </div>
+
+        <button class="calc-btn" id="btn-urban" onclick="calculate('urban')">
+          <span class="btn-text">▶ Calculate Integration</span>
+          <span class="btn-spinner"></span>
+        </button>
+
+        <div class="error-msg" id="error-urban"></div>
+
+        <div class="results-panel" id="results-urban">
+          <div class="result-grid">
+            <div class="result-box">
+              <div class="result-method">Trapezoidal Rule</div>
+              <div class="result-value" id="trap-urban">—</div>
+            </div>
+            <div class="result-box">
+              <div class="result-method">Simpson's 1/3 Rule</div>
+              <div class="result-value" id="simp-urban">—</div>
+            </div>
+          </div>
+          <div class="result-stats">
+            <span class="stat-pill" id="pts-urban">—</span>
+            <span class="stat-pill" id="mean-urban">—</span>
+            <span class="stat-pill" id="range-urban">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ▸ Module 2: Financial Growth -->
+    <div class="module-card finance">
+      <div class="card-stripe"></div>
+      <div class="card-body">
+        <div class="card-header-row">
+          <div class="module-icon">📈</div>
+          <div class="card-title-group">
+            <h2>Financial Growth Forecasting</h2>
+            <p>Compute cumulative returns, net present value approximations, or yield-curve integrals for financial analysis.</p>
+          </div>
+        </div>
+
+        <label class="input-label">Quick Sample Data</label>
+        <div class="sample-row" id="samples-finance"></div>
+
+        <label class="input-label" for="input-finance">Data Points (comma-separated)</label>
+        <div class="input-wrap">
+          <textarea
+            class="data-input"
+            id="input-finance"
+            placeholder="e.g. 2.5, 3.1, 2.8, 4.2, 5.0, 4.7, 6.1, 5.8, 7.2, 8.0"
+          ></textarea>
+        </div>
+
+        <div class="step-row">
+          <label class="input-label" style="margin:0;white-space:nowrap" for="step-finance">Step size h =</label>
+          <input class="step-input" type="number" id="step-finance" value="1" min="0.01" step="0.1" />
+          <span class="step-hint">Time interval (quarters, months, etc.)</span>
+        </div>
+
+        <button class="calc-btn" id="btn-finance" onclick="calculate('finance')">
+          <span class="btn-text">▶ Calculate Integration</span>
+          <span class="btn-spinner"></span>
+        </button>
+
+        <div class="error-msg" id="error-finance"></div>
+
+        <div class="results-panel" id="results-finance">
+          <div class="result-grid">
+            <div class="result-box">
+              <div class="result-method">Trapezoidal Rule</div>
+              <div class="result-value" id="trap-finance">—</div>
+            </div>
+            <div class="result-box">
+              <div class="result-method">Simpson's 1/3 Rule</div>
+              <div class="result-value" id="simp-finance">—</div>
+            </div>
+          </div>
+          <div class="result-stats">
+            <span class="stat-pill" id="pts-finance">—</span>
+            <span class="stat-pill" id="mean-finance">—</span>
+            <span class="stat-pill" id="range-finance">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /modules-grid -->
+
+  <!-- ── Section: Chart ── -->
+  <div class="chart-section" id="chart">
+    <div class="chart-header">
+      <div>
+        <span class="section-tag" style="margin-bottom:.4rem">Live Visualisation</span>
+        <div class="chart-title">Integration Area — Both Modules</div>
+      </div>
+      <div class="chart-legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#c94f1e"></div> Urban Values
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#e8a020;border:2px dashed #e8a020;background:none;width:18px;height:2px;border-radius:0"></div> Urban Cumulative
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#1a6b8a"></div> Finance Values
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#0fa3b1;border:2px dashed #0fa3b1;background:none;width:18px;height:2px;border-radius:0"></div> Finance Cumulative
+        </div>
+      </div>
+    </div>
+    <div class="chart-container">
+      <canvas id="integrationChart"></canvas>
+    </div>
+  </div>
+
+  <!-- ── Section: Methods ── -->
+  <div class="section-header" id="methods">
+    <span class="section-tag">Mathematical Background</span>
+    <h2 class="section-title">Numerical Methods Explained</h2>
+  </div>
+
+  <div class="methods-grid">
+    <div class="method-card">
+      <div class="method-num">01</div>
+      <div class="method-name">Trapezoidal Rule</div>
+      <div class="method-formula">∫ ≈ (h/2)[y₀ + 2y₁ + 2y₂ + … + 2yₙ₋₁ + yₙ]</div>
+      <p class="method-desc">
+        Approximates the area under a curve by summing trapezoids formed between
+        consecutive data points. Error is of order <strong>O(h²)</strong> — reliable
+        for smooth, well-sampled functions.
+      </p>
+    </div>
+    <div class="method-card">
+      <div class="method-num">02</div>
+      <div class="method-name">Simpson's 1/3 Rule</div>
+      <div class="method-formula">∫ ≈ (h/3)[y₀ + 4y₁ + 2y₂ + 4y₃ + … + 4yₙ₋₁ + yₙ]</div>
+      <p class="method-desc">
+        Fits quadratic polynomials through groups of three points, yielding a
+        much higher accuracy of order <strong>O(h⁴)</strong>. Preferred when
+        the function is smooth and the number of intervals is even.
+      </p>
+    </div>
+    <div class="method-card">
+      <div class="method-num">03</div>
+      <div class="method-name">Composite Integration</div>
+      <div class="method-formula">∫ₐᵇ f(x)dx ≈ Σ∫ₓᵢˣⁱ⁺¹ f(x)dx</div>
+      <p class="method-desc">
+        Both rules are applied in composite form — the interval [a, b] is
+        subdivided into n subintervals, dramatically reducing truncation error
+        compared to applying each rule only once over the full range.
+      </p>
+    </div>
+  </div>
+
+</main>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div>
+    <strong>Computational Approaches to Numerical Integration in Real-World Systems</strong>
+    &nbsp;— Mathematics Capstone Project
+  </div>
+  <div>Flask · Chart.js · Vanilla JS</div>
+</footer>
+
+</body>
+</html>
